@@ -1,3 +1,4 @@
+from collections import Counter
 from pathlib import Path
 from typing import Union
 
@@ -83,6 +84,30 @@ class Search:
                     index[word] = {doc_path: 1}
 
         return index
+
+    def search(self, query: str, top_n: int = 5) -> list:
+        """
+        Search query in documents.
+
+        :param query: Query to search.
+        :param top_n: number of most common results
+        :return: List of documents path.
+        """
+        query = self.pipe.transform(query)
+        search_tokens = query.split()
+
+        frequency = dict()
+        for token in search_tokens:
+            doc_paths = self.index.get(token, {})
+
+            for key, value in doc_paths.items():
+                frequency[key] = frequency.get(key, 0) + value
+
+        # get top_n of most common results
+        results = Counter(frequency).most_common()
+        results = [result[0] for result in results[:top_n]]
+
+        return results
 
 
 if __name__ == '__main__':
