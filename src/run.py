@@ -1,3 +1,4 @@
+import re
 from collections import Counter
 from pathlib import Path
 from typing import Union
@@ -107,8 +108,36 @@ class Search:
         results = Counter(frequency).most_common()
         results = [result[0] for result in results[:top_n]]
 
-        return results
+        return results, search_tokens
 
 
 if __name__ == '__main__':
     searcher = Search('data/documents')
+
+    while True:
+        print()
+        input_msg = '\033[42;30m{0}\033[m '.format('Search to find a doc (Q to Quit):')
+        query = input(input_msg)
+        print()
+
+        if query.lower() == 'q':
+            break
+
+        results, search_tokens = searcher.search(query)
+
+        for doc_path in results:
+            with open(doc_path) as f:
+                text = f.read()
+
+            for token in search_tokens:
+                # incasesensitive highlighting
+                compiled = re.compile(re.escape(token), re.IGNORECASE)
+                text = compiled.sub('\033[44;33m{0}\033[m'.format(token), text)
+
+            print('='*100)
+
+            # highlight files name
+            print('\033[43;30m{0} {1}\033[m'.format('File Name:', doc_path.stem.replace('_', ' ').title()), '\n')
+            print(text)
+
+            print('='*100)
