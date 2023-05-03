@@ -33,7 +33,7 @@ class RemoveSpace(TextProcessor):
         return ' '.join(text.split())
 
 
-class TextPipeline:
+class TextPipeline(TextProcessor):
     def __init__(self, *args):
         self.transformers = args
 

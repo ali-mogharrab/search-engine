@@ -101,6 +101,7 @@ class Search:
         for token in search_tokens:
             doc_paths = self.index.get(token, {})
 
+            # when query is more than 1 word and they are in the same file, it will sum up values
             for key, value in doc_paths.items():
                 frequency[key] = frequency.get(key, 0) + value
 
