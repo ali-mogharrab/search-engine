@@ -1,5 +1,7 @@
 # Search Engine
-A simple search engine that uses python data structures to store the data and search.
+A search engine that uses python data structures to store the data and search.
+
+<img src="./data/images/search.png">
 
 ## Usage
 ### 1. Prepare the data
